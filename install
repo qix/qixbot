@@ -1,0 +1,5 @@
+sudo apt-get install libexpat1 libexpat1-dev 
+npm install node-xmpp
+sudo apt-get install libicu-dev 
+npm install node-stringprep
+
