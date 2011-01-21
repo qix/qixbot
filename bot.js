@@ -26,6 +26,15 @@ conn.on('online', function(){
         .c('show').t('chat').up()
         .c('status').t('Available').up());
 
+    var message = function(text) {
+      conn.send(new xmpp.Element('message',
+          { to: to, // to
+              type: 'chat'}).
+              c('body').
+              t(text));
+    };
+
+    message('Hello world!');
     config.get('files').forEach(function(f) {
       var position = fs.lstatSync(f)['size'];
       fs.watchFile(f, function() {
@@ -34,16 +43,13 @@ conn.on('online', function(){
         var length = fs.readSync(fd, buffer, 0, 4096, position);
         fs.closeSync(fd);
         position += length;
-        conn.send(new xmpp.Element('message',
-            { to: to, // to
-                type: 'chat'}).
-                c('body').
-                t(buffer.toString('utf8', 0, length).trim()));
+        message(buffer.toString('utf8', 0, length).trim());
       });
     });
 });
 
 conn.on('error', function(e) {
     sys.puts(e);
+    process.exit(1);
 });
 
